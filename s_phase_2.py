@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from s_phase_1 import etl, charger_donnees
 
 
-# récupère les livres comme une liste d'url
+# récupère les url des livres dans une liste
 
 def extraire_url_books(elements):
     resultat = []
@@ -27,6 +27,7 @@ def etl_cat(url_category):
     except AttributeError:
         next = ""
 
+    # récupération de tous les titres
     if next == "next":
         page = soup.find("li", class_="current").text.strip()[10]
 
@@ -39,8 +40,6 @@ def etl_cat(url_category):
             url_book = extraire_url_books(soup_next.find_all("h3"))
             tous_livres = tous_livres + url_book
     else:
-
-        # récupération de tous les titres
         url_book = extraire_url_books(soup.find_all("h3"))
         tous_livres = tous_livres + url_book
 

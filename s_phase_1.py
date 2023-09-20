@@ -4,7 +4,7 @@ import csv
 import os
 import urllib.request
 
-# récupère les titres ou descriptions comme liste de strings
+# récupère une information des livres comme liste de strings
 def extraire_donnees(elements):
     resultat = []
     for element in elements:

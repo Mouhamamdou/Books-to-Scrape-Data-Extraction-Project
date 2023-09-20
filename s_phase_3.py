@@ -14,7 +14,7 @@ def cat_booktoScrape():
     # transforme (parse) le HTML en objet BeautifulSoup
     soup = BeautifulSoup(page, "html.parser")
 
-    # récupération de toutes les descriptions
+    # récupération de toutes les categories
     categories = soup.find("ul", class_="nav nav-list").find("ul").findAll("li")
 
     tab_category = []
@@ -26,6 +26,7 @@ def cat_booktoScrape():
         tab_category.append(category)
     return tab_category, tab_nom
 
+#initialise quelques variables et appels des fonctions
 i = 0
 bookstoscrape = cat_booktoScrape()
 for category, nom in zip(bookstoscrape[0],bookstoscrape[1]):
@@ -48,7 +49,6 @@ for category, nom in zip(bookstoscrape[0],bookstoscrape[1]):
     for book in books:
         result = etl(book)
 
-        # initialiser des listes et écrire le fichier csv
         titles = titles + result[0]
         categories = categories + result[1]
         urls = urls + result[2]
@@ -60,4 +60,4 @@ for category, nom in zip(bookstoscrape[0],bookstoscrape[1]):
         product_descriptions = product_descriptions + result[8]
         images = images + result[9]
 
-        charger_donnees(f"{nom}.csv", en_tete, titles, categories, urls, upcs, price_including_taxes, price_excluding_taxes, number_availables, review_ratings, product_descriptions, images)
+        charger_donnees(f"{nom}.csv", en_tete, titles, categories, urls, upcs , price_including_taxes, price_excluding_taxes, number_availables, review_ratings, product_descriptions, images)
