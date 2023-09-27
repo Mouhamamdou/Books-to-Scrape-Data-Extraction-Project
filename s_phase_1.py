@@ -4,30 +4,37 @@ import csv
 import os
 import urllib.request
 
-# récupère une information des livres comme liste de strings
+
 def extraire_donnees(elements):
-    resultat = []
-    for element in elements:
-        resultat.append(element.text)
+    """ Cette fonction retourne chaque type de données de livre dans une liste de string """
+    resultat = [element.text for element in elements]
     return resultat
 
-# charger la donnée dans un fichier csv
-def charger_donnees(nom_fichier, en_tete, titles, categories, urls, upcs, price_in_taxes, price_exc_taxes, number_availables, review_ratings, product_descriptions, inages):
-    with open(nom_fichier, 'w', encoding='utf-8') as fichier_csv:
+
+def charger_donnees(nom_fichier, data):
+    """ Cette fonction écrit dans un fichier csv les données extraites pour un livre """
+
+    with open(nom_fichier, 'w', encoding='utf-8', newline='') as fichier_csv:
         writer = csv.writer(fichier_csv, delimiter=',')
-        writer.writerow(en_tete)
-        # zip permet d'itérer sur deux listes à la fois
-        for title, categorie, url, upc, price_in_taxe, price_exc_taxe, number_available, review_rating, product_description, inage in zip(titles, categories, urls, upcs, price_in_taxes, price_exc_taxes, number_availables, review_ratings, product_descriptions, inages):
-            writer.writerow([title, categorie, url, upc, price_in_taxe, price_exc_taxe, number_available, review_rating, product_description, inage])
+
+        # Ecrire les entetes
+        writer.writerow(data.keys())
+
+        # Etant donnees que toutes les listes ont la même longueur
+        num_rows = len(next(iter(data.values()), []))
+
+        # Ecrire les données
+        for i in range(num_rows):
+            writer.writerow([data[key][i] if i < len(data[key]) else '' for key in data.keys()])
+
+
 def etl(url):
-    # lien de la page à scrapper
+    """ Cette fonction extrait, transforme et charge les données pour un livre """
+
     reponse = requests.get(url)
     page = reponse.content
-
-    # transforme (parse) le HTML en objet BeautifulSoup
     soup = BeautifulSoup(page, "html.parser")
 
-    # récupération de toutes les informations produits
     product_info = soup.find("table", class_="table table-striped").find_all('td')
 
     upc = extraire_donnees(product_info[0])
@@ -44,13 +51,11 @@ def etl(url):
 
     web_url = "http://books.toscrape.com/"
     img = soup.find("img").get("src").replace("../../", web_url)
-    image_url = []
-    image_url.append(img)
+    image_url = [img]
 
     category = extraire_donnees(soup.find_all("a")[3])
 
-    url_tab = []
-    url_tab.append(url)
+    url_tab = [url]
 
     try:
         os.makedirs("image")
@@ -58,7 +63,7 @@ def etl(url):
         print("directory image already exists")
 
     try:
-        os.makedirs("image/"+category[0])
+        os.makedirs("image/" + category[0])
     except FileExistsError:
         print(f"directory {category[0]} already exists")
 
@@ -67,5 +72,28 @@ def etl(url):
     except OSError:
         print(f"{title} ,image not found")
 
-    return title, category, url_tab, upc, price_inc_taxe, price_exc_taxe, number_available, review_rating, description, image_url
+    # Retourne les données sous un dictionnaire
+    data = {
+        "title": title,
+        "category": category,
+        "url": url_tab,
+        "upc": upc,
+        "price_inc_taxe": price_inc_taxe,
+        "price_exc_taxe": price_exc_taxe,
+        "number_available": number_available,
+        "review_rating": review_rating,
+        "description": description,
+        "image_url": image_url
+    }
 
+    return data
+
+
+if __name__ == "__main__":
+    url = "http://books.toscrape.com/catalogue/its-only-the-himalayas_981/index.html"
+
+    # retourne les données d'un livre sous forme de dictionnaire
+    result = etl(url)
+
+    # écrire les données dans un fichier csv
+    charger_donnees("un_livre.csv", result)

@@ -1,12 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
-from s_phase_2 import etl_cat
+from s_phase_2 import livres_par_cat
 from s_phase_1 import etl, charger_donnees
 
 
-
-def cat_booktoScrape():
-    # lien de la page à scrapper
+def tous_les_categories():
+    """ Cette fonction extrait toutes les catégories se trouvant dans le site BooktoScrape """
     url = "http://books.toscrape.com/"
     reponse = requests.get(url)
     page = reponse.content
@@ -14,50 +13,34 @@ def cat_booktoScrape():
     # transforme (parse) le HTML en objet BeautifulSoup
     soup = BeautifulSoup(page, "html.parser")
 
-    # récupération de toutes les categories
+    # récupération de toutes les categories dans un dictionnaire, la valeur est l'url de catégorie
     categories = soup.find("ul", class_="nav nav-list").find("ul").findAll("li")
+    categories_dict = {cat.text.strip(): "http://books.toscrape.com/" + cat.find("a").get("href") for cat in categories}
 
-    tab_category = []
-    tab_nom = []
-    for cat in categories:
-        category = "http://books.toscrape.com/"+cat.find("a").get("href")
-        nom = cat.text.strip()
-        tab_nom.append(nom)
-        tab_category.append(category)
-    return tab_category, tab_nom
+    return categories_dict
 
-#initialise quelques variables et appels des fonctions
-i = 0
-bookstoscrape = cat_booktoScrape()
-for category, nom in zip(bookstoscrape[0],bookstoscrape[1]):
-    i = i+1
-    print(str(i))
-    books = etl_cat(category)
-    titles = []
-    categories = []
-    urls = []
-    upcs = []
-    price_including_taxes = []
-    price_excluding_taxes = []
-    number_availables = []
-    review_ratings = []
-    product_descriptions = []
-    images = []
 
-    en_tete = ["title", "Category", "url", "upc", "price_including_taxe", "price_excluding_taxe", "number_available", "review_rating", "product_description", "image"]
+if __name__ == "__main__":
 
-    for book in books:
-        result = etl(book)
+    # retounre toutes les catégories (nom et url) se trouvant dans BooktoScrape, sous forme de dictionnaire
+    les_categories = tous_les_categories()
 
-        titles = titles + result[0]
-        categories = categories + result[1]
-        urls = urls + result[2]
-        upcs = upcs + result[3]
-        price_including_taxes = price_including_taxes + result[4]
-        price_excluding_taxes = price_excluding_taxes + result[5]
-        number_availables = number_availables + result[6]
-        review_ratings = review_ratings + result[7]
-        product_descriptions = product_descriptions + result[8]
-        images = images + result[9]
+    i = 0
+    for nom_categorie, url_categorie in les_categories.items():
+        i += 1
+        print(f"{i} eme categorie ==> {nom_categorie}: {url_categorie}")
 
-        charger_donnees(f"{nom}.csv", en_tete, titles, categories, urls, upcs , price_including_taxes, price_excluding_taxes, number_availables, review_ratings, product_descriptions, images)
+        # retourne tous les livres (titre et url) contenus dans une catégorie
+        books_in_cat = livres_par_cat(url_categorie)
+        all_books = {}
+        for titre, url_book in books_in_cat.items():
+
+            # retourne un dictionnaire contenant les données de chaque livre
+            data_book = etl(url_book)
+
+            # fusionner les données des livres en dictionnaire de listes de données
+            for key in set(all_books.keys()) | set(data_book.keys()):
+                all_books[key] = all_books.get(key, []) + data_book.get(key, [])
+
+        # ecrire les données dans un fichier csv
+        charger_donnees(f"{nom_categorie}.csv", all_books)
