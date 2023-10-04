@@ -5,7 +5,7 @@ Le projet comprend 3 script python : s_phase_1.py, s_phase_2.py et s_phase_3.py.
 On y a également inclut un fichier requirements.txt qui contient toutes les librairies nécessaires à l'éxecution du projet.
 
 Commencez par créer un environnement virtuel avec la commande suivante :
-python -m vene < nom_de_l'environnement >
+python -m venv < nom_de_l'environnement >
 
 Ensuite déplacez vous dans le dossier Scripts de l'environnement virtuel,
 et activer celui-ci grâce à la commande source activate
