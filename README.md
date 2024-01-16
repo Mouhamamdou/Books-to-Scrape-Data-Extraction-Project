@@ -33,10 +33,13 @@ This will scrape data from each category and save it in separate CSV files named
 
 ## Features
 
-. Extracts book details including title, category, rating, price, availability, and image URL.
-. Handles pagination to scrape data from categories spanning multiple pages.
-. Dynamically creates directories for storing book images.
-. Writes scraped data into CSV files for easy analysis and storage.
+  Extracts book details including title, category, rating, price, availability, and image URL.
+  
+  Handles pagination to scrape data from categories spanning multiple pages.
+  
+  Dynamically creates directories for storing book images.
+  
+  Writes scraped data into CSV files for easy analysis and storage.
 
 ## Error Handling
 
@@ -44,8 +47,9 @@ The scripts include basic error handling for scenarios like missing data fields 
 
 ## Limitations
 
-. The current implementation processes requests sequentially, which could be slow for large datasets. Parallel processing could be implemented for performance improvement.
-. The script does not have advanced error recovery mechanisms, which might be necessary for handling network issues or website structure changes.
+  The current implementation processes requests sequentially, which could be slow for large datasets. Parallel processing could be implemented for performance improvement.
+  
+  The script does not have advanced error recovery mechanisms, which might be necessary for handling network issues or website structure changes.
 
 ## Disclaimer
 
