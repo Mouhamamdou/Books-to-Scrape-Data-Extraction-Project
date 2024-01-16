@@ -12,7 +12,7 @@ The project is divided into several Python scripts, each handling different aspe
 
 2. s_phase_2.py: Extends s_phase_1 functionalities to handle books from a specific category.
 
-3. main_script.py: The main driver script (this file) that utilizes the functions from s_phase_1.py and s_phase_2.py to extract data from all categories available on the website.
+3. s_phase_3.py: The main driver script (this file) that utilizes the functions from s_phase_1.py and s_phase_2.py to extract data from all categories available on the website.
 
 ## Installation
 
@@ -27,7 +27,7 @@ Additionally, Open a terminal or command prompt and navigate to the directory wh
 To run the main script and scrape data from the entire website, execute the following command in your terminal:
 
     ```bash
-    python main_script.py
+    python s_phase_3.py
 
 This will scrape data from each category and save it in separate CSV files named after the category.
 
@@ -41,6 +41,11 @@ This will scrape data from each category and save it in separate CSV files named
 ## Error Handling
 
 The scripts include basic error handling for scenarios like missing data fields or failed image downloads. However, for robust production use, further enhancement in error handling is recommended.
+
+## Limitations
+
+. The current implementation processes requests sequentially, which could be slow for large datasets. Parallel processing could be implemented for performance improvement.
+. The script does not have advanced error recovery mechanisms, which might be necessary for handling network issues or website structure changes.
 
 ## Disclaimer
 
