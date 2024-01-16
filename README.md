@@ -1,25 +1,52 @@
-# Projet-2
+# README: Books to Scrape Data Extraction Project
 
-Le projet comprend 3 script python : s_phase_1.py, s_phase_2.py et s_phase_3.py.
+## Project Overview
 
-On y a également inclut un fichier requirements.txt qui contient toutes les librairies nécessaires à l'éxecution du projet.
+This project involves a Python-based web scraping tool designed to extract detailed information about books from the "Books to Scrape" website. It captures data such as book titles, categories, ratings, prices, and image URLs. The tool is capable of scraping data from individual books, entire categories, and even the entire website.
 
-Commencez par créer un environnement virtuel avec la commande suivante :
-python -m venv < nom_de_l'environnement >
+## Project Structure
 
-Ensuite déplacez vous dans le dossier Scripts de l'environnement virtuel,
-et activer celui-ci grâce à la commande source activate
+The project is divided into several Python scripts, each handling different aspects of the scraping process:
 
-L'execution du code se fait selon le besoin :
+1. s_phase_1.py: Contains functions for extracting, transforming, and loading (ETL) data for individual books.
 
-S'il est exécuté à partir du script s_phase_3.py, le programme va récupérer toutes les catégories existantes dans le site BooktoScrape,
-et extraire les données des livres de chaque catégorie.
-Le résultat est un ensemble de fichier csv pour chaque catégorie, contenant les données extraites des livres de la catégorie.
-Le programme crée également des sous dossiers d'image pour catégorie contenant les images téléchargées pour chaque livre.
+2. s_phase_2.py: Extends s_phase_1 functionalities to handle books from a specific category.
 
-Le programme peut également être exécuté à partir du script s_phase_2.py.
-Dans ce cas il faut renseigner l'url d'une catégorie de livre.
-Le résultat est un fichier csv de la catégorie renseignée en entrée, contenant les données de tous les livres de cette catégorie.
+3. main_script.py: The main driver script (this file) that utilizes the functions from s_phase_1.py and s_phase_2.py to extract data from all categories available on the website.
 
-Enfin si le programme est lancé dans le script s_phase_1.py, on doit renseigner l'ur d'un livre en entrée.
-Il va générer un fichier csv contenant les données de ce livre.
+## Installation
+
+Before running the scripts, ensure you have Python installed on your machine.
+Additionally, Open a terminal or command prompt and navigate to the directory where the requirements.txt file is located. Then, run the following command to install the required packages:
+
+    ```bash
+pip install -r requirements.txt
+
+## Usage
+
+To run the main script and scrape data from the entire website, execute the following command in your terminal:
+
+    ```bash
+python main_script.py
+
+This will scrape data from each category and save it in separate CSV files named after the category.
+
+## Features
+
+. Extracts book details including title, category, rating, price, availability, and image URL.
+. Handles pagination to scrape data from categories spanning multiple pages.
+. Dynamically creates directories for storing book images.
+. Writes scraped data into CSV files for easy analysis and storage.
+
+## Error Handling
+
+The scripts include basic error handling for scenarios like missing data fields or failed image downloads. However, for robust production use, further enhancement in error handling is recommended.
+
+## Disclaimer
+
+This project is intended for educational purposes only. Web scraping should be done responsibly and in compliance with the website's terms of service or use policy. It's important to check robots.txt of the website and ensure your scraping activity is allowed.
+
+## Contribution
+
+Contributions to this project are welcome. Please ensure you follow good coding practices and thoroughly test any new features before submitting a pull request.
+
