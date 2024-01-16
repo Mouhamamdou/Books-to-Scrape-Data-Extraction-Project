@@ -20,14 +20,14 @@ Before running the scripts, ensure you have Python installed on your machine.
 Additionally, Open a terminal or command prompt and navigate to the directory where the requirements.txt file is located. Then, run the following command to install the required packages:
 
     ```bash
-pip install -r requirements.txt
+    pip install -r requirements.txt
 
 ## Usage
 
 To run the main script and scrape data from the entire website, execute the following command in your terminal:
 
     ```bash
-python main_script.py
+    python main_script.py
 
 This will scrape data from each category and save it in separate CSV files named after the category.
 
